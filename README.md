@@ -47,6 +47,21 @@ fastgen/
 
 **Recommended:** Use the provided Docker container for a consistent environment. See [CONTRIBUTING.md](CONTRIBUTING.md) for Docker setup instructions. Otherwise, create a new [conda](https://www.anaconda.com/docs/getting-started/miniconda/install) environment with `conda create -y -n fastgen python=3.12.3 pip; conda activate fastgen`.
 
+### Docker workshop quickstart
+
+```bash
+git clone https://github.com/hseth585/FastGen.git
+cd FastGen
+docker build -t fastgen-workshop .
+docker run --gpus all -p 8889:8888 fastgen-workshop \
+  jupyter notebook --ip=0.0.0.0 --no-browser --allow-root \
+  --NotebookApp.token='' --NotebookApp.password='' \
+  --ServerApp.allow_origin='*' \
+  --ServerApp.allow_remote_access=True
+```
+
+Then open http://localhost:8889 and launch the notebook named `fastgen_docker.ipynb`.
+
 ### Installation
 
 ```bash

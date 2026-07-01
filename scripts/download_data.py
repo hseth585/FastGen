@@ -211,6 +211,7 @@ def run_dataset_tool(
     use_subcommand: bool = False,
     subcommand: str = "convert",
     force: bool = False,
+    max_images: Optional[int] = None,
 ) -> bool:
     """
     Run dataset_tool.py with common error handling.
@@ -235,6 +236,8 @@ def run_dataset_tool(
         cmd.append(f"--resolution={resolution}")
     if transform:
         cmd.append(f"--transform={transform}")
+    if max_images is not None:
+        cmd.append(f"--max-images={max_images}")
 
     logger.info(f"Creating dataset: {dest.name}")
     logger.debug(f"Running: {' '.join(cmd)}")
@@ -600,6 +603,12 @@ Examples:
         help="Compute FID reference statistics for datasets",
     )
     parser.add_argument(
+        "--max-samples",
+        type=int,
+        default=None,
+        help="Limit number of images in the dataset (e.g. 10000 for workshop)",
+    )
+    parser.add_argument(
         "--log-level",
         type=str,
         default="INFO",
@@ -650,7 +659,7 @@ Examples:
             if not args.only_models:
                 if not cifar_path.exists() or args.force:
                     download_file(CIFAR10_URL, tar_path, "Downloading CIFAR-10", CIFAR10_MD5)
-                run_dataset_tool(edm_dir, tar_path, cifar_path, force=args.force)
+                run_dataset_tool(edm_dir, tar_path, cifar_path, force=args.force, max_images=args.max_samples)
 
                 if args.compute_fid_refs:
                     compute_fid_refs(
