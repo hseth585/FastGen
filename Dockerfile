@@ -68,6 +68,20 @@ RUN pip install wandb[media] \
     "numpy<2.0.0" 
 RUN pip uninstall -y apex 
 
+
+
+# Install FastGen
+RUN git clone https://github.com/hseth585/FastGen.git /workspace/FastGen
+WORKDIR /workspace/FastGen
+RUN pip install -e .
+
+# Register Jupyter kernel
+RUN python -m ipykernel install --name fastgen --display-name "Python (fastgen GPU)"
+
+EXPOSE 8888
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--notebook-dir=/workspace/FastGen"]
+
+
 WORKDIR /workspace
 
 # Entry point
